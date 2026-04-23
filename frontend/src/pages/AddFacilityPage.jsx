@@ -22,6 +22,36 @@ function AddFacilityPage() {
 	const location = useLocation();
 	const navigate = useNavigate();
 
+	const convert24To12Hour = (time24) => {
+		if (!time24) return '';
+		const [hourStr, minute] = time24.split(':');
+		let hour = parseInt(hourStr, 10);
+		const ampm = hour >= 12 ? 'PM' : 'AM';
+		hour = hour % 12 || 12;
+		return `${String(hour).padStart(2, '0')}:${minute} ${ampm}`;
+	};
+
+	const convert12To24Hour = (time12) => {
+		if (!time12) return '';
+
+		const match = time12.trim().match(/^(\d{1,2}):(\d{2})\s?(AM|PM)$/i);
+		if (!match) return null;
+
+		let hour = parseInt(match[1], 10);
+		const minute = match[2];
+		const ampm = match[3].toUpperCase();
+
+		if (hour < 1 || hour > 12) return null;
+
+		if (ampm === 'AM') {
+			if (hour === 12) hour = 0;
+		} else {
+			if (hour !== 12) hour += 12;
+		}
+
+		return `${String(hour).padStart(2, '0')}:${minute}`;
+	};
+
 	useEffect(() => {
 		if (location.state?.facility) {
 			const facility = location.state.facility;
@@ -33,8 +63,12 @@ function AddFacilityPage() {
 				capacity: facility.capacity || '',
 				location: facility.location || '',
 				status: facility.status || '',
-				availableFrom: facility.availableFrom || '',
-				availableTo: facility.availableTo || '',
+				availableFrom: facility.availableFrom
+					? convert24To12Hour(facility.availableFrom)
+					: '',
+				availableTo: facility.availableTo
+					? convert24To12Hour(facility.availableTo)
+					: '',
 				description: facility.description || '',
 			});
 		}
@@ -91,19 +125,32 @@ function AddFacilityPage() {
 			return;
 		}
 
-		if (formData.status !== 'OUT_OF_SERVICE' && !formData.availableFrom) {
-			setError('Available from time is required');
-			return;
-		}
-
-		if (formData.status !== 'OUT_OF_SERVICE' && !formData.availableTo) {
-			setError('Available to time is required');
-			return;
-		}
-
 		if (!formData.description.trim()) {
 			setError('Description is required');
 			return;
+		}
+
+		let availableFrom24 = '';
+		let availableTo24 = '';
+
+		if (formData.status !== 'OUT_OF_SERVICE') {
+			if (!formData.availableFrom.trim()) {
+				setError('Available from time is required');
+				return;
+			}
+
+			if (!formData.availableTo.trim()) {
+				setError('Available to time is required');
+				return;
+			}
+
+			availableFrom24 = convert12To24Hour(formData.availableFrom);
+			availableTo24 = convert12To24Hour(formData.availableTo);
+
+			if (!availableFrom24 || !availableTo24) {
+				setError('Please enter time in format HH:MM AM/PM');
+				return;
+			}
 		}
 
 		try {
@@ -113,20 +160,17 @@ function AddFacilityPage() {
 				status: formData.status.toUpperCase(),
 				capacity: Number(formData.capacity),
 				availableFrom:
-					formData.status === 'OUT_OF_SERVICE' ? '' : formData.availableFrom,
-				availableTo:
-					formData.status === 'OUT_OF_SERVICE' ? '' : formData.availableTo,
+					formData.status === 'OUT_OF_SERVICE' ? '' : availableFrom24,
+				availableTo: formData.status === 'OUT_OF_SERVICE' ? '' : availableTo24,
 			};
 
 			if (editingId) {
 				await updateFacility(editingId, payload);
-				alert('Resource updated successfully');
+				navigate('/facilities');
 			} else {
 				await createFacility(payload);
-				alert('Resource saved successfully');
+				navigate('/facilities');
 			}
-
-			resetForm();
 		} catch (err) {
 			console.error(err);
 			setError('Failed to save resource');

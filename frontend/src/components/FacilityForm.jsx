@@ -69,8 +69,9 @@ function FacilityForm({
 				<div className='input-group'>
 					<label>Available From</label>
 					<input
-						type='time'
+						type='text'
 						name='availableFrom'
+						placeholder='08:00 AM'
 						value={formData.availableFrom}
 						onChange={handleChange}
 						disabled={formData.status === 'OUT_OF_SERVICE'}
@@ -81,8 +82,9 @@ function FacilityForm({
 				<div className='input-group'>
 					<label>Available To</label>
 					<input
-						type='time'
+						type='text'
 						name='availableTo'
+						placeholder='05:00 PM'
 						value={formData.availableTo}
 						onChange={handleChange}
 						disabled={formData.status === 'OUT_OF_SERVICE'}
