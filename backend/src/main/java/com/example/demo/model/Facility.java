@@ -2,8 +2,6 @@ package com.example.demo.model;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -13,35 +11,29 @@ public class Facility {
     @Id
     private String id;
 
-    @NotBlank(message = "Resource name is required")
+    @NotBlank(message = "Code is required")
+    private String code;
+
+    @NotBlank(message = "Name is required")
     private String name;
 
     @NotBlank(message = "Type is required")
-    @Pattern(
-            regexp = "LAB|HALL|ROOM|PROJECTOR|CAMERA|MICROPHONE|LAPTOP",
-            message = "Type must be LAB, HALL, ROOM, PROJECTOR, CAMERA, MICROPHONE, or LAPTOP"
-    )
     private String type;
 
-    @NotNull(message = "Capacity is required")
     @Min(value = 1, message = "Capacity must be greater than 0")
-    private Integer capacity;
+    private int capacity;
 
     @NotBlank(message = "Location is required")
     private String location;
 
     @NotBlank(message = "Status is required")
-    @Pattern(
-            regexp = "ACTIVE|OUT_OF_SERVICE",
-            message = "Status must be ACTIVE or OUT_OF_SERVICE"
-    )
     private String status;
 
-    @NotBlank(message = "Available from time is required")
     private String availableFrom;
-
-    @NotBlank(message = "Available to time is required")
     private String availableTo;
+
+    @NotBlank(message = "Category is required")
+    private String category;
 
     @NotBlank(message = "Description is required")
     private String description;
@@ -49,8 +41,11 @@ public class Facility {
     public Facility() {
     }
 
-    public Facility(String name, String type, Integer capacity, String location,
-                    String status, String availableFrom, String availableTo, String description) {
+    public Facility(String id, String code, String name, String type, int capacity,
+                    String location, String status, String availableFrom,
+                    String availableTo, String category, String description) {
+        this.id = id;
+        this.code = code;
         this.name = name;
         this.type = type;
         this.capacity = capacity;
@@ -58,6 +53,7 @@ public class Facility {
         this.status = status;
         this.availableFrom = availableFrom;
         this.availableTo = availableTo;
+        this.category = category;
         this.description = description;
     }
 
@@ -69,6 +65,14 @@ public class Facility {
         this.id = id;
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+    
     public String getName() {
         return name;
     }
@@ -84,12 +88,11 @@ public class Facility {
     public void setType(String type) {
         this.type = type;
     }
-
-    public Integer getCapacity() {
+    public int getCapacity() {
         return capacity;
     }
 
-    public void setCapacity(Integer capacity) {
+    public void setCapacity(int capacity) {
         this.capacity = capacity;
     }
 
@@ -123,6 +126,14 @@ public class Facility {
 
     public void setAvailableTo(String availableTo) {
         this.availableTo = availableTo;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public String getDescription() {
