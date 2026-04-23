@@ -10,8 +10,12 @@ function AddFacilityPage() {
 		capacity: '',
 		location: '',
 		status: '',
-		availableFrom: '',
-		availableTo: '',
+		availableFromHour: '',
+		availableFromMinute: '',
+		availableFromPeriod: '',
+		availableToHour: '',
+		availableToMinute: '',
+		availableToPeriod: '',
 		description: '',
 	};
 
@@ -22,39 +26,43 @@ function AddFacilityPage() {
 	const location = useLocation();
 	const navigate = useNavigate();
 
-	const convert24To12Hour = (time24) => {
-		if (!time24) return '';
-		const [hourStr, minute] = time24.split(':');
-		let hour = parseInt(hourStr, 10);
-		const ampm = hour >= 12 ? 'PM' : 'AM';
-		hour = hour % 12 || 12;
-		return `${String(hour).padStart(2, '0')}:${minute} ${ampm}`;
-	};
-
-	const convert12To24Hour = (time12) => {
-		if (!time12) return '';
-
-		const match = time12.trim().match(/^(\d{1,2}):(\d{2})\s?(AM|PM)$/i);
-		if (!match) return null;
-
-		let hour = parseInt(match[1], 10);
-		const minute = match[2];
-		const ampm = match[3].toUpperCase();
-
-		if (hour < 1 || hour > 12) return null;
-
-		if (ampm === 'AM') {
-			if (hour === 12) hour = 0;
-		} else {
-			if (hour !== 12) hour += 12;
+	const convert24To12Parts = (time24) => {
+		if (!time24) {
+			return { hour: '', minute: '', period: '' };
 		}
 
-		return `${String(hour).padStart(2, '0')}:${minute}`;
+		const [hourStr, minute] = time24.split(':');
+		let hour = parseInt(hourStr, 10);
+		const period = hour >= 12 ? 'PM' : 'AM';
+		hour = hour % 12 || 12;
+
+		return {
+			hour: String(hour).padStart(2, '0'),
+			minute,
+			period,
+		};
+	};
+
+	const convert12PartsTo24 = (hour, minute, period) => {
+		if (!hour || !minute || !period) return '';
+
+		let h = parseInt(hour, 10);
+
+		if (period === 'AM') {
+			if (h === 12) h = 0;
+		} else {
+			if (h !== 12) h += 12;
+		}
+
+		return `${String(h).padStart(2, '0')}:${minute}`;
 	};
 
 	useEffect(() => {
 		if (location.state?.facility) {
 			const facility = location.state.facility;
+
+			const fromParts = convert24To12Parts(facility.availableFrom);
+			const toParts = convert24To12Parts(facility.availableTo);
 
 			setEditingId(facility.id);
 			setFormData({
@@ -63,12 +71,12 @@ function AddFacilityPage() {
 				capacity: facility.capacity || '',
 				location: facility.location || '',
 				status: facility.status || '',
-				availableFrom: facility.availableFrom
-					? convert24To12Hour(facility.availableFrom)
-					: '',
-				availableTo: facility.availableTo
-					? convert24To12Hour(facility.availableTo)
-					: '',
+				availableFromHour: fromParts.hour,
+				availableFromMinute: fromParts.minute,
+				availableFromPeriod: fromParts.period,
+				availableToHour: toParts.hour,
+				availableToMinute: toParts.minute,
+				availableToPeriod: toParts.period,
 				description: facility.description || '',
 			});
 		}
@@ -83,8 +91,12 @@ function AddFacilityPage() {
 		};
 
 		if (name === 'status' && value === 'OUT_OF_SERVICE') {
-			updatedForm.availableFrom = '';
-			updatedForm.availableTo = '';
+			updatedForm.availableFromHour = '';
+			updatedForm.availableFromMinute = '';
+			updatedForm.availableFromPeriod = '';
+			updatedForm.availableToHour = '';
+			updatedForm.availableToMinute = '';
+			updatedForm.availableToPeriod = '';
 		}
 
 		setFormData(updatedForm);
@@ -115,8 +127,8 @@ function AddFacilityPage() {
 			return;
 		}
 
-		if (!formData.location.trim()) {
-			setError('Location is required');
+		if (!formData.location) {
+			setError('Please select a location');
 			return;
 		}
 
@@ -130,47 +142,60 @@ function AddFacilityPage() {
 			return;
 		}
 
-		let availableFrom24 = '';
-		let availableTo24 = '';
+		let availableFrom = '';
+		let availableTo = '';
 
 		if (formData.status !== 'OUT_OF_SERVICE') {
-			if (!formData.availableFrom.trim()) {
-				setError('Available from time is required');
+			if (
+				!formData.availableFromHour ||
+				!formData.availableFromMinute ||
+				!formData.availableFromPeriod
+			) {
+				setError('Please select full Available From time');
 				return;
 			}
 
-			if (!formData.availableTo.trim()) {
-				setError('Available to time is required');
+			if (
+				!formData.availableToHour ||
+				!formData.availableToMinute ||
+				!formData.availableToPeriod
+			) {
+				setError('Please select full Available To time');
 				return;
 			}
 
-			availableFrom24 = convert12To24Hour(formData.availableFrom);
-			availableTo24 = convert12To24Hour(formData.availableTo);
+			availableFrom = convert12PartsTo24(
+				formData.availableFromHour,
+				formData.availableFromMinute,
+				formData.availableFromPeriod,
+			);
 
-			if (!availableFrom24 || !availableTo24) {
-				setError('Please enter time in format HH:MM AM/PM');
-				return;
-			}
+			availableTo = convert12PartsTo24(
+				formData.availableToHour,
+				formData.availableToMinute,
+				formData.availableToPeriod,
+			);
 		}
 
 		try {
 			const payload = {
-				...formData,
+				name: formData.name,
 				type: formData.type.toUpperCase(),
-				status: formData.status.toUpperCase(),
 				capacity: Number(formData.capacity),
-				availableFrom:
-					formData.status === 'OUT_OF_SERVICE' ? '' : availableFrom24,
-				availableTo: formData.status === 'OUT_OF_SERVICE' ? '' : availableTo24,
+				location: formData.location,
+				status: formData.status.toUpperCase(),
+				availableFrom,
+				availableTo,
+				description: formData.description,
 			};
 
 			if (editingId) {
 				await updateFacility(editingId, payload);
-				navigate('/facilities');
 			} else {
 				await createFacility(payload);
-				navigate('/facilities');
 			}
+
+			navigate('/facilities');
 		} catch (err) {
 			console.error(err);
 			setError('Failed to save resource');

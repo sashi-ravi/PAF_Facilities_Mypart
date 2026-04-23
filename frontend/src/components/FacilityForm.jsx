@@ -5,6 +5,35 @@ function FacilityForm({
 	handleSubmit,
 	resetForm,
 }) {
+	const locations = [
+		'Main Building',
+		'New Building',
+		'A Block',
+		'B Block',
+		'C Block',
+		'IT Building',
+		'Media Unit',
+		'Equipment Room',
+		'Library',
+	];
+
+	const hours = [
+		'01',
+		'02',
+		'03',
+		'04',
+		'05',
+		'06',
+		'07',
+		'08',
+		'09',
+		'10',
+		'11',
+		'12',
+	];
+
+	const minutes = ['00', '15', '30', '45'];
+
 	return (
 		<div className='card'>
 			<h2 className='section-title'>
@@ -47,14 +76,20 @@ function FacilityForm({
 					required
 				/>
 
-				<input
-					type='text'
+				<select
 					name='location'
-					placeholder='Location / Storage Room'
 					value={formData.location}
 					onChange={handleChange}
-					required
-				/>
+					required>
+					<option value=''>Select Location</option>
+					{locations.map((loc) => (
+						<option
+							key={loc}
+							value={loc}>
+							{loc}
+						</option>
+					))}
+				</select>
 
 				<select
 					name='status'
@@ -66,30 +101,100 @@ function FacilityForm({
 					<option value='OUT_OF_SERVICE'>OUT OF SERVICE</option>
 				</select>
 
-				<div className='input-group'>
+				<div className='time-group-wrapper'>
 					<label>Available From</label>
-					<input
-						type='text'
-						name='availableFrom'
-						placeholder='08:00 AM'
-						value={formData.availableFrom}
-						onChange={handleChange}
-						disabled={formData.status === 'OUT_OF_SERVICE'}
-						required={formData.status !== 'OUT_OF_SERVICE'}
-					/>
+					<div className='time-select-group'>
+						<select
+							name='availableFromHour'
+							value={formData.availableFromHour}
+							onChange={handleChange}
+							disabled={formData.status === 'OUT_OF_SERVICE'}
+							required={formData.status !== 'OUT_OF_SERVICE'}>
+							<option value=''>HH</option>
+							{hours.map((hour) => (
+								<option
+									key={hour}
+									value={hour}>
+									{hour}
+								</option>
+							))}
+						</select>
+
+						<select
+							name='availableFromMinute'
+							value={formData.availableFromMinute}
+							onChange={handleChange}
+							disabled={formData.status === 'OUT_OF_SERVICE'}
+							required={formData.status !== 'OUT_OF_SERVICE'}>
+							<option value=''>MM</option>
+							{minutes.map((minute) => (
+								<option
+									key={minute}
+									value={minute}>
+									{minute}
+								</option>
+							))}
+						</select>
+
+						<select
+							name='availableFromPeriod'
+							value={formData.availableFromPeriod}
+							onChange={handleChange}
+							disabled={formData.status === 'OUT_OF_SERVICE'}
+							required={formData.status !== 'OUT_OF_SERVICE'}>
+							<option value=''>AM/PM</option>
+							<option value='AM'>AM</option>
+							<option value='PM'>PM</option>
+						</select>
+					</div>
 				</div>
 
-				<div className='input-group'>
+				<div className='time-group-wrapper'>
 					<label>Available To</label>
-					<input
-						type='text'
-						name='availableTo'
-						placeholder='05:00 PM'
-						value={formData.availableTo}
-						onChange={handleChange}
-						disabled={formData.status === 'OUT_OF_SERVICE'}
-						required={formData.status !== 'OUT_OF_SERVICE'}
-					/>
+					<div className='time-select-group'>
+						<select
+							name='availableToHour'
+							value={formData.availableToHour}
+							onChange={handleChange}
+							disabled={formData.status === 'OUT_OF_SERVICE'}
+							required={formData.status !== 'OUT_OF_SERVICE'}>
+							<option value=''>HH</option>
+							{hours.map((hour) => (
+								<option
+									key={hour}
+									value={hour}>
+									{hour}
+								</option>
+							))}
+						</select>
+
+						<select
+							name='availableToMinute'
+							value={formData.availableToMinute}
+							onChange={handleChange}
+							disabled={formData.status === 'OUT_OF_SERVICE'}
+							required={formData.status !== 'OUT_OF_SERVICE'}>
+							<option value=''>MM</option>
+							{minutes.map((minute) => (
+								<option
+									key={minute}
+									value={minute}>
+									{minute}
+								</option>
+							))}
+						</select>
+
+						<select
+							name='availableToPeriod'
+							value={formData.availableToPeriod}
+							onChange={handleChange}
+							disabled={formData.status === 'OUT_OF_SERVICE'}
+							required={formData.status !== 'OUT_OF_SERVICE'}>
+							<option value=''>AM/PM</option>
+							<option value='AM'>AM</option>
+							<option value='PM'>PM</option>
+						</select>
+					</div>
 				</div>
 
 				<textarea
