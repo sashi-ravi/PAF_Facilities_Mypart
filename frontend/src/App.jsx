@@ -6,25 +6,41 @@ import sliitLogo from './assets/SLIIT.png';
 
 function App() {
 	return (
-		<div className='courseweb-layout'>
-			<header className='top-header'>
-				<div className='top-header-inner'>
+		<div className='fm-layout'>
+			<header className='fm-top'>
+				<div className='fm-top-inner'>
 					<img
 						src={sliitLogo}
 						alt='SLIIT Logo'
-						className='sliit-logo'
+						className='fm-logo'
 					/>
+
+					<div className='fm-brand-text'>
+						<p className='fm-brand-small'>
+							SRI LANKA INSTITUTE OF INFORMATION TECHNOLOGY
+						</p>
+						<h1 className='fm-brand-title'>
+							SLIIT <span>Facilities</span> Manager
+						</h1>
+						<p className='fm-brand-tagline'>Discover Your Future</p>
+					</div>
 				</div>
+
+				<nav className='fm-nav'>
+					<Link
+						to='/'
+						className='fm-nav-link'>
+						Add Facility
+					</Link>
+					<Link
+						to='/facilities'
+						className='fm-nav-link'>
+						Facilities List
+					</Link>
+				</nav>
 			</header>
 
-			<nav className='courseweb-navbar'>
-				<div className='courseweb-nav-inner'>
-					<Link to='/'>Add Facility</Link>
-					<Link to='/facilities'>Facilities List</Link>
-				</div>
-			</nav>
-
-			<main className='main-content'>
+			<main className='fm-main'>
 				<Routes>
 					<Route
 						path='/'

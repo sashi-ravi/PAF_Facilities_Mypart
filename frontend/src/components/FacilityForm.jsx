@@ -8,13 +8,9 @@ function FacilityForm({
 	const locations = [
 		'Main Building',
 		'New Building',
-		'A Block',
-		'B Block',
-		'C Block',
-		'IT Building',
-		'Media Unit',
-		'Equipment Room',
-		'Library',
+		'Tower B',
+		'FabLab',
+		'Auditorium',
 	];
 
 	const hours = [
@@ -31,191 +27,193 @@ function FacilityForm({
 		'11',
 		'12',
 	];
-
 	const minutes = ['00', '15', '30', '45'];
 
 	return (
-		<div className='card'>
-			<h2 className='section-title'>
+		<div className='form-card'>
+			<h3 className='form-title'>
 				{editingId ? 'Update Resource' : 'Add Resource'}
-			</h2>
+			</h3>
 
 			<form
 				className='facility-form'
 				onSubmit={handleSubmit}>
-				<input
-					type='text'
-					name='name'
-					placeholder='Resource Name'
-					value={formData.name}
-					onChange={handleChange}
-					required
-				/>
+				{/* Row 1 */}
+				<div className='input-group'>
+					<label>Resource Code</label>
+					<input
+						name='code'
+						placeholder='LAB-A1'
+						value={formData.code}
+						onChange={handleChange}
+					/>
+				</div>
 
-				<select
-					name='type'
-					value={formData.type}
-					onChange={handleChange}
-					required>
-					<option value=''>Select Type</option>
-					<option value='LAB'>LAB</option>
-					<option value='HALL'>HALL</option>
-					<option value='ROOM'>ROOM</option>
-					<option value='PROJECTOR'>PROJECTOR</option>
-					<option value='CAMERA'>CAMERA</option>
-					<option value='MICROPHONE'>MICROPHONE</option>
-					<option value='LAPTOP'>LAPTOP</option>
-				</select>
+				<div className='input-group'>
+					<label>Resource Name</label>
+					<input
+						name='name'
+						placeholder='Lab 1305'
+						value={formData.name}
+						onChange={handleChange}
+					/>
+				</div>
 
-				<input
-					type='number'
-					name='capacity'
-					placeholder='Capacity / Units'
-					value={formData.capacity}
-					onChange={handleChange}
-					required
-				/>
+				{/* Row 2 */}
+				<div className='input-group'>
+					<label>Type</label>
+					<select
+						name='type'
+						value={formData.type}
+						onChange={handleChange}>
+						<option value=''>Select Type</option>
+						<option value='LAB'>LAB</option>
+						<option value='HALL'>HALL</option>
+						<option value='ROOM'>ROOM</option>
+						<option value='PROJECTOR'>PROJECTOR</option>
+					</select>
+				</div>
 
-				<select
-					name='location'
-					value={formData.location}
-					onChange={handleChange}
-					required>
-					<option value=''>Select Location</option>
-					{locations.map((loc) => (
-						<option
-							key={loc}
-							value={loc}>
-							{loc}
-						</option>
-					))}
-				</select>
+				<div className='input-group'>
+					<label>Capacity</label>
+					<input
+						type='number'
+						name='capacity'
+						placeholder='40'
+						value={formData.capacity}
+						onChange={handleChange}
+					/>
+				</div>
 
-				<select
-					name='status'
-					value={formData.status}
-					onChange={handleChange}
-					required>
-					<option value=''>Select Status</option>
-					<option value='ACTIVE'>ACTIVE</option>
-					<option value='OUT_OF_SERVICE'>OUT OF SERVICE</option>
-				</select>
+				{/* Row 3 */}
+				<div className='input-group'>
+					<label>Location</label>
+					<select
+						name='location'
+						value={formData.location}
+						onChange={handleChange}>
+						<option value=''>Select Location</option>
+						{locations.map((loc) => (
+							<option key={loc}>{loc}</option>
+						))}
+					</select>
+				</div>
 
-				<div className='time-group-wrapper'>
+				<div className='input-group'>
+					<label>Status</label>
+					<select
+						name='status'
+						value={formData.status}
+						onChange={handleChange}>
+						<option value=''>Select Status</option>
+						<option value='ACTIVE'>ACTIVE</option>
+						<option value='OUT_OF_SERVICE'>OUT OF SERVICE</option>
+					</select>
+				</div>
+
+				{/* Row 4 */}
+				<div className='input-group'>
+					<label>Category</label>
+					<select
+						name='category'
+						value={formData.category}
+						onChange={handleChange}>
+						<option value=''>Select Category</option>
+						<option value='Academic'>Academic</option>
+						<option value='Equipment'>Equipment</option>
+						<option value='Service'>Service</option>
+					</select>
+				</div>
+
+				{/* Time */}
+				<div className='input-group'>
 					<label>Available From</label>
-					<div className='time-select-group'>
+					<div className='time-select-row'>
 						<select
 							name='availableFromHour'
 							value={formData.availableFromHour}
-							onChange={handleChange}
-							disabled={formData.status === 'OUT_OF_SERVICE'}
-							required={formData.status !== 'OUT_OF_SERVICE'}>
-							<option value=''>HH</option>
-							{hours.map((hour) => (
-								<option
-									key={hour}
-									value={hour}>
-									{hour}
-								</option>
+							onChange={handleChange}>
+							<option>HH</option>
+							{hours.map((h) => (
+								<option key={h}>{h}</option>
 							))}
 						</select>
 
 						<select
 							name='availableFromMinute'
 							value={formData.availableFromMinute}
-							onChange={handleChange}
-							disabled={formData.status === 'OUT_OF_SERVICE'}
-							required={formData.status !== 'OUT_OF_SERVICE'}>
-							<option value=''>MM</option>
-							{minutes.map((minute) => (
-								<option
-									key={minute}
-									value={minute}>
-									{minute}
-								</option>
+							onChange={handleChange}>
+							<option>MM</option>
+							{minutes.map((m) => (
+								<option key={m}>{m}</option>
 							))}
 						</select>
 
 						<select
 							name='availableFromPeriod'
 							value={formData.availableFromPeriod}
-							onChange={handleChange}
-							disabled={formData.status === 'OUT_OF_SERVICE'}
-							required={formData.status !== 'OUT_OF_SERVICE'}>
-							<option value=''>AM/PM</option>
-							<option value='AM'>AM</option>
-							<option value='PM'>PM</option>
+							onChange={handleChange}>
+							<option>AM/PM</option>
+							<option>AM</option>
+							<option>PM</option>
 						</select>
 					</div>
 				</div>
 
-				<div className='time-group-wrapper'>
+				<div className='input-group'>
 					<label>Available To</label>
-					<div className='time-select-group'>
+					<div className='time-select-row'>
 						<select
 							name='availableToHour'
 							value={formData.availableToHour}
-							onChange={handleChange}
-							disabled={formData.status === 'OUT_OF_SERVICE'}
-							required={formData.status !== 'OUT_OF_SERVICE'}>
-							<option value=''>HH</option>
-							{hours.map((hour) => (
-								<option
-									key={hour}
-									value={hour}>
-									{hour}
-								</option>
+							onChange={handleChange}>
+							<option>HH</option>
+							{hours.map((h) => (
+								<option key={h}>{h}</option>
 							))}
 						</select>
 
 						<select
 							name='availableToMinute'
 							value={formData.availableToMinute}
-							onChange={handleChange}
-							disabled={formData.status === 'OUT_OF_SERVICE'}
-							required={formData.status !== 'OUT_OF_SERVICE'}>
-							<option value=''>MM</option>
-							{minutes.map((minute) => (
-								<option
-									key={minute}
-									value={minute}>
-									{minute}
-								</option>
+							onChange={handleChange}>
+							<option>MM</option>
+							{minutes.map((m) => (
+								<option key={m}>{m}</option>
 							))}
 						</select>
 
 						<select
 							name='availableToPeriod'
 							value={formData.availableToPeriod}
-							onChange={handleChange}
-							disabled={formData.status === 'OUT_OF_SERVICE'}
-							required={formData.status !== 'OUT_OF_SERVICE'}>
-							<option value=''>AM/PM</option>
-							<option value='AM'>AM</option>
-							<option value='PM'>PM</option>
+							onChange={handleChange}>
+							<option>AM/PM</option>
+							<option>AM</option>
+							<option>PM</option>
 						</select>
 					</div>
 				</div>
 
+				{/* Description */}
 				<textarea
 					name='description'
 					placeholder='Description'
 					value={formData.description}
 					onChange={handleChange}
-					required
-					className='description-textarea'
+					className='form-textarea'
 				/>
 
-				<div className='form-buttons'>
+				{/* Buttons */}
+				<div className='form-actions'>
 					<button
-						className='btn btn-primary'
+						className='btn-primary'
 						type='submit'>
 						{editingId ? 'Update Resource' : 'Add Resource'}
 					</button>
 
 					{editingId && (
 						<button
-							className='btn btn-secondary'
+							className='btn-secondary'
 							type='button'
 							onClick={resetForm}>
 							Cancel

@@ -8,3 +8,6 @@ export const createFacility = (facility) => axios.post(API_URL, facility);
 export const updateFacility = (id, facility) =>
 	axios.put(`${API_URL}/${id}`, facility);
 export const deleteFacility = (id) => axios.delete(`${API_URL}/${id}`);
+
+export const searchFacilities = (params) =>
+	axios.get(`${API_URL}/search`, { params });

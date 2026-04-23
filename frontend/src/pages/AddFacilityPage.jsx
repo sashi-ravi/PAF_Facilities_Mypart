@@ -1,15 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { createFacility, updateFacility } from '../services/facilityService';
 import FacilityForm from '../components/FacilityForm';
+import { createFacility, updateFacility } from '../services/facilityService';
 
 function AddFacilityPage() {
 	const initialFormState = {
+		code: '',
 		name: '',
 		type: '',
 		capacity: '',
 		location: '',
 		status: '',
+		category: '',
 		availableFromHour: '',
 		availableFromMinute: '',
 		availableFromPeriod: '',
@@ -27,9 +29,7 @@ function AddFacilityPage() {
 	const navigate = useNavigate();
 
 	const convert24To12Parts = (time24) => {
-		if (!time24) {
-			return { hour: '', minute: '', period: '' };
-		}
+		if (!time24) return { hour: '', minute: '', period: '' };
 
 		const [hourStr, minute] = time24.split(':');
 		let hour = parseInt(hourStr, 10);
@@ -60,17 +60,18 @@ function AddFacilityPage() {
 	useEffect(() => {
 		if (location.state?.facility) {
 			const facility = location.state.facility;
-
 			const fromParts = convert24To12Parts(facility.availableFrom);
 			const toParts = convert24To12Parts(facility.availableTo);
 
 			setEditingId(facility.id);
 			setFormData({
+				code: facility.code || '',
 				name: facility.name || '',
 				type: facility.type || '',
 				capacity: facility.capacity || '',
 				location: facility.location || '',
 				status: facility.status || '',
+				category: facility.category || '',
 				availableFromHour: fromParts.hour,
 				availableFromMinute: fromParts.minute,
 				availableFromPeriod: fromParts.period,
@@ -84,22 +85,18 @@ function AddFacilityPage() {
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
-
-		let updatedForm = {
-			...formData,
-			[name]: value,
-		};
+		const updated = { ...formData, [name]: value };
 
 		if (name === 'status' && value === 'OUT_OF_SERVICE') {
-			updatedForm.availableFromHour = '';
-			updatedForm.availableFromMinute = '';
-			updatedForm.availableFromPeriod = '';
-			updatedForm.availableToHour = '';
-			updatedForm.availableToMinute = '';
-			updatedForm.availableToPeriod = '';
+			updated.availableFromHour = '';
+			updated.availableFromMinute = '';
+			updated.availableFromPeriod = '';
+			updated.availableToHour = '';
+			updated.availableToMinute = '';
+			updated.availableToPeriod = '';
 		}
 
-		setFormData(updatedForm);
+		setFormData(updated);
 		setError('');
 	};
 
@@ -112,35 +109,17 @@ function AddFacilityPage() {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		if (!formData.name.trim()) {
-			setError('Resource name is required');
-			return;
-		}
-
-		if (!formData.type) {
-			setError('Please select a resource type');
-			return;
-		}
-
+		if (!formData.code.trim()) return setError('Code is required');
+		if (!formData.name.trim()) return setError('Name is required');
+		if (!formData.type) return setError('Type is required');
 		if (!formData.capacity || Number(formData.capacity) <= 0) {
-			setError('Capacity must be greater than 0');
-			return;
+			return setError('Capacity must be greater than 0');
 		}
-
-		if (!formData.location) {
-			setError('Please select a location');
-			return;
-		}
-
-		if (!formData.status) {
-			setError('Please select a status');
-			return;
-		}
-
-		if (!formData.description.trim()) {
-			setError('Description is required');
-			return;
-		}
+		if (!formData.location) return setError('Location is required');
+		if (!formData.status) return setError('Status is required');
+		if (!formData.category) return setError('Category is required');
+		if (!formData.description.trim())
+			return setError('Description is required');
 
 		let availableFrom = '';
 		let availableTo = '';
@@ -151,8 +130,7 @@ function AddFacilityPage() {
 				!formData.availableFromMinute ||
 				!formData.availableFromPeriod
 			) {
-				setError('Please select full Available From time');
-				return;
+				return setError('Available From time is required');
 			}
 
 			if (
@@ -160,8 +138,7 @@ function AddFacilityPage() {
 				!formData.availableToMinute ||
 				!formData.availableToPeriod
 			) {
-				setError('Please select full Available To time');
-				return;
+				return setError('Available To time is required');
 			}
 
 			availableFrom = convert12PartsTo24(
@@ -177,18 +154,20 @@ function AddFacilityPage() {
 			);
 		}
 
-		try {
-			const payload = {
-				name: formData.name,
-				type: formData.type.toUpperCase(),
-				capacity: Number(formData.capacity),
-				location: formData.location,
-				status: formData.status.toUpperCase(),
-				availableFrom,
-				availableTo,
-				description: formData.description,
-			};
+		const payload = {
+			code: formData.code,
+			name: formData.name,
+			type: formData.type,
+			capacity: Number(formData.capacity),
+			location: formData.location,
+			status: formData.status,
+			availableFrom,
+			availableTo,
+			category: formData.category,
+			description: formData.description,
+		};
 
+		try {
 			if (editingId) {
 				await updateFacility(editingId, payload);
 			} else {
@@ -203,16 +182,10 @@ function AddFacilityPage() {
 	};
 
 	return (
-		<div className='page-wrapper'>
-			<div className='title-card'>
-				<h1 className='page-heading'>
-					{editingId ? 'Update Resource' : 'Facilities & Assets Management'}
-				</h1>
-				<p className='page-description'>
-					{editingId
-						? 'Update the selected facility or equipment.'
-						: 'Add and manage campus facilities and equipment for the smart campus system.'}
-				</p>
+		<div className='page-shell'>
+			<div className='page-card'>
+				<h2 className='page-title'> SMART CAMPUS</h2>
+				<p className='page-subtitle'>Facilities & Assets Management</p>
 			</div>
 
 			{error && <p className='error-text'>{error}</p>}
