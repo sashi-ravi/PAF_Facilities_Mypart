@@ -206,9 +206,7 @@ function AddFacilityPage() {
 		<div className='page-wrapper'>
 			<div className='title-card'>
 				<h1 className='page-heading'>
-					{editingId
-						? 'Update Resource'
-						: 'IT3030 - Facilities & Assets Management'}
+					{editingId ? 'Update Resource' : 'Facilities & Assets Management'}
 				</h1>
 				<p className='page-description'>
 					{editingId
