@@ -8,7 +8,7 @@ function FacilityForm({
 	return (
 		<div className='card'>
 			<h2 className='section-title'>
-				{editingId ? 'Update Facility' : 'Add Facility'}
+				{editingId ? 'Update Resource' : 'Add Resource'}
 			</h2>
 
 			<form
@@ -17,7 +17,7 @@ function FacilityForm({
 				<input
 					type='text'
 					name='name'
-					placeholder='Facility Name'
+					placeholder='Resource Name'
 					value={formData.name}
 					onChange={handleChange}
 					required
@@ -32,12 +32,16 @@ function FacilityForm({
 					<option value='LAB'>LAB</option>
 					<option value='HALL'>HALL</option>
 					<option value='ROOM'>ROOM</option>
+					<option value='PROJECTOR'>PROJECTOR</option>
+					<option value='CAMERA'>CAMERA</option>
+					<option value='MICROPHONE'>MICROPHONE</option>
+					<option value='LAPTOP'>LAPTOP</option>
 				</select>
 
 				<input
 					type='number'
 					name='capacity'
-					placeholder='Capacity'
+					placeholder='Capacity / Units'
 					value={formData.capacity}
 					onChange={handleChange}
 					required
@@ -46,7 +50,7 @@ function FacilityForm({
 				<input
 					type='text'
 					name='location'
-					placeholder='Location'
+					placeholder='Location / Storage Room'
 					value={formData.location}
 					onChange={handleChange}
 					required
@@ -69,7 +73,8 @@ function FacilityForm({
 						name='availableFrom'
 						value={formData.availableFrom}
 						onChange={handleChange}
-						required
+						disabled={formData.status === 'OUT_OF_SERVICE'}
+						required={formData.status !== 'OUT_OF_SERVICE'}
 					/>
 				</div>
 
@@ -80,24 +85,25 @@ function FacilityForm({
 						name='availableTo'
 						value={formData.availableTo}
 						onChange={handleChange}
-						required
+						disabled={formData.status === 'OUT_OF_SERVICE'}
+						required={formData.status !== 'OUT_OF_SERVICE'}
 					/>
 				</div>
 
-				<input
-					type='text'
+				<textarea
 					name='description'
 					placeholder='Description'
 					value={formData.description}
 					onChange={handleChange}
 					required
+					className='description-textarea'
 				/>
 
 				<div className='form-buttons'>
 					<button
 						className='btn btn-primary'
 						type='submit'>
-						{editingId ? 'Update Facility' : 'Add Facility'}
+						{editingId ? 'Update Resource' : 'Add Resource'}
 					</button>
 
 					{editingId && (

@@ -3,6 +3,7 @@ package com.example.demo.model;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -12,28 +13,37 @@ public class Facility {
     @Id
     private String id;
 
-    @NotBlank(message = "Name is required")
+    @NotBlank(message = "Resource name is required")
     private String name;
 
     @NotBlank(message = "Type is required")
+    @Pattern(
+            regexp = "LAB|HALL|ROOM|PROJECTOR|CAMERA|MICROPHONE|LAPTOP",
+            message = "Type must be LAB, HALL, ROOM, PROJECTOR, CAMERA, MICROPHONE, or LAPTOP"
+    )
     private String type;
 
     @NotNull(message = "Capacity is required")
-    @Min(value = 1, message = "Capacity must be at least 1")
+    @Min(value = 1, message = "Capacity must be greater than 0")
     private Integer capacity;
 
     @NotBlank(message = "Location is required")
     private String location;
 
     @NotBlank(message = "Status is required")
+    @Pattern(
+            regexp = "ACTIVE|OUT_OF_SERVICE",
+            message = "Status must be ACTIVE or OUT_OF_SERVICE"
+    )
     private String status;
 
-    @NotBlank(message = "Available from is required")
+    @NotBlank(message = "Available from time is required")
     private String availableFrom;
 
-    @NotBlank(message = "Available to is required")
+    @NotBlank(message = "Available to time is required")
     private String availableTo;
 
+    @NotBlank(message = "Description is required")
     private String description;
 
     public Facility() {

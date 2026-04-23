@@ -3,8 +3,6 @@ import FacilityRow from './FacilityRow';
 function FacilityTable({ facilities, handleEdit, handleDelete }) {
 	return (
 		<div className='card'>
-			<h2 className='section-title'>Facilities List</h2>
-
 			{facilities.length === 0 ? (
 				<p className='empty-text'>No facilities found.</p>
 			) : (

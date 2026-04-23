@@ -1,116 +1,150 @@
 body {
 	margin: 0;
 	font-family: Arial, sans-serif;
-	background-color: #f4f6f9;
-}
-
-.app-container {
-	max-width: 1200px;
-	margin: 30px auto;
-	padding: 20px;
-}
-
-.main-title {
-	text-align: center;
-	color: #1f3c88;
-	margin-bottom: 30px;
-}
-
-.section-title {
-	margin-bottom: 15px;
+	background-color: #eef1f5;
 	color: #333;
 }
 
-.card {
-	background: #ffffff;
-	padding: 20px;
-	margin-bottom: 25px;
-	border-radius: 10px;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+.courseweb-layout {
+	min-height: 100vh;
 }
 
+/* Top logo area */
+.top-header {
+	background: #ffffff;
+	border-bottom: 4px solid #d9a441;
+}
+
+.top-header-inner {
+	max-width: 1250px;
+	margin: 0 auto;
+	padding: 18px 20px;
+	display: flex;
+	align-items: center;
+}
+
+.sliit-logo {
+	height: 75px;
+	object-fit: contain;
+}
+
+/* Dark nav bar */
+.courseweb-navbar {
+	background-color: #39434c;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.courseweb-nav-inner {
+	max-width: 1250px;
+	margin: 0 auto;
+	padding: 0 20px;
+	display: flex;
+	gap: 28px;
+	align-items: center;
+	height: 56px;
+}
+
+.courseweb-nav-inner a {
+	color: white;
+	text-decoration: none;
+	font-size: 15px;
+	font-weight: 500;
+	padding: 8px 4px;
+	transition: color 0.2s ease;
+}
+
+.courseweb-nav-inner a:hover {
+	color: #f5c76a;
+}
+
+/* Main content */
+.main-content {
+	max-width: 1250px;
+	margin: 28px auto;
+	padding: 0 20px;
+}
+
+.page-wrapper {
+	width: 100%;
+}
+
+/* Title card */
+.title-card {
+	background: #ffffff;
+	border-radius: 10px;
+	padding: 28px 32px;
+	margin-bottom: 24px;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+	border: 1px solid #e4e8ed;
+}
+
+.page-heading {
+	margin: 0 0 8px;
+	font-size: 26px;
+	color: #3a3a3a;
+	font-weight: 700;
+}
+
+.page-description {
+	margin: 0;
+	color: #666;
+	font-size: 15px;
+	line-height: 1.5;
+}
+
+/* Form card */
+.card,
+.filter-card {
+	background: #ffffff;
+	border-radius: 10px;
+	padding: 26px;
+	margin-bottom: 24px;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+	border: 1px solid #e4e8ed;
+}
+
+.section-title,
+.filter-title {
+	margin: 0 0 18px;
+	font-size: 18px;
+	color: #222;
+	font-weight: 700;
+}
+
+/* Form */
 .facility-form {
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
-	gap: 12px;
+	gap: 14px;
 }
 
-.facility-form input {
-	padding: 10px;
-	border: 1px solid #ccc;
-	border-radius: 6px;
-	font-size: 14px;
-}
-
-.form-buttons {
-	grid-column: span 2;
-	display: flex;
-	gap: 10px;
-	margin-top: 10px;
-}
-
-.btn {
-	padding: 9px 14px;
-	border: none;
-	border-radius: 6px;
-	cursor: pointer;
-	font-size: 14px;
-}
-
-.btn-primary {
-	background-color: #1f78ff;
-	color: white;
-}
-
-.btn-secondary {
-	background-color: #6c757d;
-	color: white;
-}
-
-.btn-edit {
-	background-color: #f0ad4e;
-	color: white;
-	margin-right: 8px;
-}
-
-.btn-delete {
-	background-color: #d9534f;
-	color: white;
-}
-
-.table-wrapper {
-	overflow-x: auto;
-}
-
-.facility-table {
+.facility-form input,
+.facility-form select,
+.description-textarea,
+.filter-input {
 	width: 100%;
-	border-collapse: collapse;
+	padding: 12px 14px;
+	border: 1px solid #cfd6dd;
+	border-radius: 6px;
+	font-size: 14px;
+	box-sizing: border-box;
+	background: #fff;
+	color: #333;
 }
 
-.facility-table th,
-.facility-table td {
-	border: 1px solid #ddd;
-	padding: 12px;
-	text-align: center;
+.facility-form input:focus,
+.facility-form select:focus,
+.description-textarea:focus,
+.filter-input:focus {
+	outline: none;
+	border-color: #2f67d8;
+	box-shadow: 0 0 0 2px rgba(47, 103, 216, 0.15);
 }
 
-.facility-table th {
-	background-color: #1f3c88;
-	color: white;
-}
-
-.facility-table tr:nth-child(even) {
-	background-color: #f9f9f9;
-}
-
-.error-text {
-	color: red;
-	font-weight: bold;
-	margin-bottom: 15px;
-}
-
-.empty-text {
-	color: #666;
+.facility-form input:disabled {
+	background-color: #e9ecef;
+	color: #6c757d;
+	cursor: not-allowed;
 }
 
 .input-group {
@@ -121,21 +155,203 @@ body {
 .input-group label {
 	font-size: 13px;
 	color: #555;
-	margin-bottom: 4px;
+	margin-bottom: 6px;
+	font-weight: 500;
 }
 
-.facility-form select,
-.facility-form input {
-	padding: 10px;
-	border: 1px solid #ccc;
-	border-radius: 6px;
-	font-size: 14px;
+.description-textarea {
+	min-height: 110px;
+	resize: vertical;
+	grid-column: span 2;
 }
-.search-input {
-	width: 100%;
-	padding: 10px;
-	border: 1px solid #ccc;
-	border-radius: 6px;
+
+.form-buttons {
+	grid-column: span 2;
+	display: flex;
+	gap: 10px;
+	margin-top: 6px;
+}
+
+/* Buttons - Updated Style */
+.btn,
+.clear-btn {
+	border: none;
+	border-radius: 4px;
+	padding: 10px 18px;
+	cursor: pointer;
 	font-size: 14px;
-	box-sizing: border-box;
+	font-weight: 600;
+	transition:
+		background-color 0.2s ease,
+		transform 0.2s ease;
+	box-shadow: none;
+}
+
+.btn:hover,
+.clear-btn:hover {
+	transform: translateY(-1px);
+}
+
+/* Main blue button */
+.btn-primary {
+	background-color: #4a90e2;
+	color: white;
+	border: 1px solid #3b7ac4;
+}
+
+.btn-primary:hover {
+	background-color: #3d7fcc;
+}
+
+/* Gray button */
+.btn-secondary,
+.clear-btn {
+	background-color: #5f6b73;
+	color: white;
+}
+
+.btn-secondary:hover,
+.clear-btn:hover {
+	background-color: #4e5961;
+}
+
+/* Edit button */
+.btn-edit {
+	background-color: #d6a13a;
+	color: white;
+	min-width: 78px;
+}
+
+.btn-edit:hover {
+	background-color: #bf8f2f;
+}
+
+/* Delete button */
+.btn-delete {
+	background-color: #d9534f;
+	color: white;
+	min-width: 78px;
+}
+
+.btn-delete:hover {
+	background-color: #c63f3b;
+}
+
+.action-buttons {
+	display: flex;
+	justify-content: center;
+	gap: 10px;
+}
+
+/* Filters */
+.filter-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 14px;
+}
+
+/* Table */
+.table-wrapper {
+	overflow-x: auto;
+}
+
+.facility-table {
+	width: 100%;
+	border-collapse: collapse;
+	min-width: 1100px;
+	background: #fff;
+}
+
+.facility-table th,
+.facility-table td {
+	border: 1px solid #d9dfe6;
+	padding: 16px 12px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.facility-table th {
+	background-color: #314693;
+	color: white;
+	font-size: 15px;
+	font-weight: 700;
+}
+
+.facility-table tr:nth-child(even) {
+	background-color: #f8fafc;
+}
+
+.facility-table tr:hover {
+	background-color: #f2f6fb;
+}
+
+.description-cell {
+	max-width: 260px;
+	white-space: normal;
+	word-break: break-word;
+	line-height: 1.5;
+}
+
+/* Status badges */
+.status-badge {
+	padding: 7px 14px;
+	border-radius: 999px;
+	font-size: 13px;
+	font-weight: 700;
+	display: inline-block;
+}
+
+.status-badge.active {
+	background-color: #dff2e1;
+	color: #2d6b37;
+}
+
+.status-badge.inactive {
+	background-color: #f6dddd;
+	color: #9c2f2f;
+}
+
+/* Error text */
+.error-text {
+	color: #b52b27;
+	background: #f8d7da;
+	padding: 12px 14px;
+	border-radius: 6px;
+	margin-bottom: 20px;
+	font-weight: 600;
+	border: 1px solid #f1b8be;
+}
+
+.empty-text {
+	color: #666;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+	.facility-form {
+		grid-template-columns: 1fr;
+	}
+
+	.description-textarea,
+	.form-buttons {
+		grid-column: span 1;
+	}
+
+	.filter-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.sliit-logo {
+		height: 58px;
+	}
+
+	.page-heading {
+		font-size: 22px;
+	}
+
+	.courseweb-nav-inner {
+		flex-wrap: wrap;
+		height: auto;
+		padding: 12px 20px;
+	}
 }
